@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLEQ — Music Listening and Enjoyment Questionnaire</title>
+<style>
+  :root{
+    --ink:#1f2a2e;
+    --paper:#fbfaf6;
+    --paper-2:#f1efe6;
+    --line:#d8d3c4;
+    --teal:#2f6f6b;
+    --teal-dark:#214f4c;
+    --amber:#c5793c;
+    --good:#3c7a52;
+    --warn:#a8442f;
+    --radius:10px;
+    --max-w:760px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper-2);
+    color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype","Georgia",serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .util-font{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;}
+
+  #app{max-width:var(--max-w);margin:0 auto;padding:0 16px 80px;}
+
+  header.top{
+    position:sticky;top:0;z-index:20;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:14px 16px 12px;
+    margin:0 -16px;
+  }
+  header.top .titlebar{max-width:var(--max-w);margin:0 auto;}
+  header.top h1{
+    font-size:1.05rem;
+    margin:0 0 2px;
+    letter-spacing:.01em;
+    font-weight:600;
+    color:var(--teal-dark);
+  }
+  header.top .sub{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.72rem;
+    color:#6b6456;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+  .progress-track{
+    margin-top:10px;height:6px;border-radius:4px;
+    background:var(--line);overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;background:linear-gradient(90deg,var(--teal),var(--amber));
+    width:0%;transition:width .35s ease;
+  }
+  .progress-label{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.68rem;color:#827a68;margin-top:5px;display:flex;justify-content:space-between;
+  }
+
+  .intro{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px 18px 16px;margin:18px 0;
+  }
+  .intro p{margin:0 0 10px;font-size:.95rem;}
+  .intro .legend{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.78rem;color:#594f3f;background:var(--paper-2);
+    border-left:3px solid var(--amber);padding:10px 12px;border-radius:6px;margin-top:12px;
+  }
+
+  fieldset.qblock{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    background:var(--paper);
+    margin:18px 0;
+    padding:18px 18px 20px;
+  }
+  fieldset.qblock legend{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-weight:700;font-size:.78rem;letter-spacing:.06em;
+    color:var(--teal-dark);text-transform:uppercase;
+    padding:0 8px;margin-left:-8px;
+  }
+  .qtext{font-size:1rem;margin:2px 0 14px;font-weight:600;color:var(--ink);}
+  .qhint{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.78rem;color:#73695a;margin:-8px 0 14px;font-style:italic;
+  }
+
+  label.field-label{
+    display:block;font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.74rem;color:#73695a;text-transform:uppercase;letter-spacing:.05em;
+    margin:14px 0 6px;
+  }
+  input[type=text],input[type=date],input[type=number],textarea{
+    width:100%;font-family:inherit;font-size:.95rem;
+    padding:9px 10px;border:1px solid var(--line);border-radius:7px;
+    background:#fff;color:var(--ink);
+  }
+  textarea{resize:vertical;min-height:70px;}
+  input:focus,textarea:focus,button:focus-visible,.opt:focus-visible{
+    outline:2px solid var(--teal);outline-offset:1px;
+  }
+
+  .row2{display:flex;gap:12px;flex-wrap:wrap;}
+  .row2 > div{flex:1;min-width:140px;}
+
+  /* radio-style pill choices */
+  .choices{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+  .choices.vertical{flex-direction:column;}
+  .opt{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.85rem;
+    border:1px solid var(--line);background:#fff;color:var(--ink);
+    border-radius:20px;padding:7px 14px;cursor:pointer;user-select:none;
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  .opt input{position:absolute;opacity:0;pointer-events:none;}
+  .opt.selected{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .opt:hover{border-color:var(--teal);}
+
+  .yn{display:flex;gap:8px;}
+
+  /* scale grid for instrument/style tables */
+  .scale-table{margin-top:6px;border-top:1px solid var(--line);}
+  .scale-head{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.68rem;color:#73695a;text-transform:uppercase;letter-spacing:.04em;
+    padding:10px 0 4px;position:sticky;top:0;background:var(--paper);
+  }
+  .scale-head .lbl-item{}
+  .scale-head .lbl-col{text-align:center;}
+  .scale-row{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center;
+    padding:9px 0;border-bottom:1px solid var(--line);
+  }
+  .scale-row .item-name{font-size:.88rem;padding-right:4px;}
+  .scale-opts{display:flex;justify-content:center;gap:3px;}
+  .scale-btn{
+    width:30px;height:30px;border-radius:50%;border:1px solid var(--line);
+    background:#fff;font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.72rem;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  .scale-btn.na{width:auto;padding:0 7px;border-radius:14px;font-size:.62rem;}
+  .scale-btn.selected{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .scale-btn:hover{border-color:var(--teal);}
+
+  @media (max-width:480px){
+    .scale-head,.scale-row{grid-template-columns:1fr;}
+    .scale-row{gap:6px;}
+    .scale-opts{justify-content:flex-start;flex-wrap:wrap;}
+    .scale-head .lbl-col:first-of-type{margin-top:4px;}
+    .col-divider{border-top:1px dashed var(--line);margin-top:6px;padding-top:6px;}
+  }
+
+  .specify-line{display:flex;gap:8px;align-items:center;margin-top:8px;}
+  .specify-line input{flex:1;}
+
+  .navbar{
+    position:fixed;bottom:0;left:0;right:0;background:var(--paper);
+    border-top:1px solid var(--line);padding:10px 16px;
+    display:flex;justify-content:space-between;align-items:center;gap:10px;z-index:30;
+  }
+  .navbar .inner{max-width:var(--max-w);margin:0 auto;width:100%;display:flex;justify-content:space-between;gap:10px;}
+  button.nav-btn{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-weight:600;font-size:.85rem;padding:10px 18px;border-radius:8px;
+    border:1px solid var(--teal);background:var(--teal);color:#fff;cursor:pointer;
+  }
+  button.nav-btn.secondary{background:transparent;color:var(--teal-dark);border-color:var(--line);}
+  button.nav-btn:disabled{opacity:.4;cursor:not-allowed;}
+  .status-pill{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;font-size:.68rem;
+    color:#827a68;align-self:center;
+  }
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  .save-toast{
+    position:fixed;bottom:64px;left:50%;transform:translateX(-50%) translateY(10px);
+    background:var(--teal-dark);color:#fff;font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.78rem;padding:8px 16px;border-radius:20px;opacity:0;
+    transition:opacity .25s, transform .25s;pointer-events:none;z-index:40;
+  }
+  .save-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .summary-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:20px;margin:18px 0;text-align:center;
+  }
+  .summary-card h2{color:var(--teal-dark);margin-top:0;}
+  .export-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+  .export-row button{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;font-size:.82rem;
+    padding:9px 16px;border-radius:8px;border:1px solid var(--teal);background:#fff;color:var(--teal-dark);cursor:pointer;
+  }
+  .export-row button.primary{background:var(--teal);color:#fff;}
+
+  details.gdrive-note{
+    margin-top:14px;text-align:left;font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.78rem;color:#594f3f;background:var(--paper-2);border-radius:8px;padding:10px 12px;
+  }
+  details.gdrive-note summary{cursor:pointer;font-weight:600;color:var(--teal-dark);}
+  details.gdrive-note p{margin:8px 0 0;}
+
+  .resp-id{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;font-size:.68rem;color:#a39a86;text-align:center;margin-top:6px;}
+
+  .clear-link{
+    display:block;text-align:center;margin-top:10px;font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.72rem;color:#a8442f;background:none;border:none;cursor:pointer;text-decoration:underline;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header class="top">
+    <div class="titlebar">
+      <h1>Music Listening &amp; Enjoyment Questionnaire</h1>
+      <div class="sub">MLEQ · Post-CI Version</div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label">
+        <span id="progressText">Section 1 of 11</span>
+        <span id="progressPct">0%</span>
+      </div>
+    </div>
+  </header>
+
+  <form id="mleqForm" autocomplete="off">
+
+  <!-- SECTION 0: Intro + Demographics -->
+  <section class="panel active" data-panel="0">
+    <div class="intro">
+      <p>This questionnaire compares your experience of listening to music with hearing aids (before your implant) to now, with your cochlear implant. Please answer every question as best you can — there are no right or wrong answers. Thank you for your time.</p>
+    </div>
+
+    <fieldset class="qblock">
+      <legend>About you</legend>
+      <label class="field-label">Name</label>
+      <input type="text" id="f_name" name="f_name">
+
+      <div class="row2">
+        <div>
+          <label class="field-label">Date of birth</label>
+          <input type="date" id="f_dob" name="f_dob">
+        </div>
+        <div>
+          <label class="field-label">Today's date</label>
+          <input type="date" id="f_date" name="f_date">
+        </div>
+        <div>
+          <label class="field-label">Age</label>
+          <input type="number" id="f_age" name="f_age" min="0" max="120">
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label class="field-label">Date of implant</label>
+          <input type="date" id="f_implantdate" name="f_implantdate">
+        </div>
+        <div>
+          <label class="field-label">Type of implant</label>
+          <input type="text" id="f_implanttype" name="f_implanttype">
+        </div>
+      </div>
+
+      <div class="row2">
+        <div>
+          <label class="field-label">Date of switch-on</label>
+          <input type="date" id="f_switchon" name="f_switchon">
+        </div>
+        <div>
+          <label class="field-label">Ear implanted</label>
+          <div class="choices" data-group="f_ear">
+            <label class="opt"><input type="radio" name="f_ear" value="Left">Left</label>
+            <label class="opt"><input type="radio" name="f_ear" value="Right">Right</label>
+          </div>
+        </div>
+      </div>
+
+      <label class="field-label">Strategy used (if known — eg. ACE, SPEAK etc.)</label>
+      <input type="text" id="f_strategy" name="f_strategy">
+
+      <label class="field-label">Listening program used for everyday listening (eg. P1, P2 etc.)</label>
+      <input type="text" id="f_program" name="f_program">
+
+      <label class="field-label">Do you still wear a hearing aid in the other ear?</label>
+      <div class="choices" data-group="f_otherha">
+        <label class="opt"><input type="radio" name="f_otherha" value="Yes">Yes</label>
+        <label class="opt"><input type="radio" name="f_otherha" value="No">No</label>
+      </div>
+      <div id="f_otherha_detail" style="display:none;margin-top:8px;">
+        <label class="field-label">If yes, type of aid</label>
+        <input type="text" id="f_otherha_type" name="f_otherha_type">
+      </div>
+
+      <label class="field-label">Have you used the following features with your CI?</label>
+      <div class="row2">
+        <div>
+          <span class="qhint" style="margin:0 0 6px;display:block;">Direct audio input</span>
+          <div class="choices" data-group="f_dai"><label class="opt"><input type="radio" name="f_dai" value="Yes">Yes</label><label class="opt"><input type="radio" name="f_dai" value="No">No</label></div>
+        </div>
+        <div>
+          <span class="qhint" style="margin:0 0 6px;display:block;">Telecoil</span>
+          <div class="choices" data-group="f_telecoil"><label class="opt"><input type="radio" name="f_telecoil" value="Yes">Yes</label><label class="opt"><input type="radio" name="f_telecoil" value="No">No</label></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="qblock">
+      <legend>Overall impressions</legend>
+      <p class="qtext">In your opinion, how much difference has the implant made for your speech perception?</p>
+      <div class="choices vertical" data-group="f_speechdiff">
+        <label class="opt"><input type="radio" name="f_speechdiff" value="1">1 — Worse</label>
+        <label class="opt"><input type="radio" name="f_speechdiff" value="2">2 — No change</label>
+        <label class="opt"><input type="radio" name="f_speechdiff" value="3">3 — A little better</label>
+        <label class="opt"><input type="radio" name="f_speechdiff" value="4">4 — Somewhat better</label>
+        <label class="opt"><input type="radio" name="f_speechdiff" value="5">5 — Much better</label>
+      </div>
+
+      <p class="qtext">How satisfied are you with the cochlear implant so far?</p>
+      <div class="choices vertical" data-group="f_satisfaction">
+        <label class="opt"><input type="radio" name="f_satisfaction" value="1">1 — Unsatisfied</label>
+        <label class="opt"><input type="radio" name="f_satisfaction" value="2">2 — Indifferent</label>
+        <label class="opt"><input type="radio" name="f_satisfaction" value="3">3 — A little satisfied</label>
+        <label class="opt"><input type="radio" name="f_satisfaction" value="4">4 — Somewhat satisfied</label>
+        <label class="opt"><input type="radio" name="f_satisfaction" value="5">5 — Very satisfied</label>
+      </div>
+
+      <p class="qtext">Overall, has the cochlear implant met your expectations?</p>
+      <div class="choices" data-group="f_expectations">
+        <label class="opt"><input type="radio" name="f_expectations" value="No">No</label>
+        <label class="opt"><input type="radio" name="f_expectations" value="Yes">Yes</label>
+        <label class="opt"><input type="radio" name="f_expectations" value="Unsure">Unsure</label>
+      </div>
+      <label class="field-label">Please comment</label>
+      <textarea id="f_expectations_comment" name="f_expectations_comment"></textarea>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 1: Q1 -->
+  <section class="panel" data-panel="1">
+    <fieldset class="qblock">
+      <legend>Question 1</legend>
+      <p class="qtext">a) Prior to your CI, how often did you choose to listen to music (eg. radio, tape, CD, concerts etc.)?</p>
+      <div class="choices" data-group="q1a_freq">
+        <label class="opt"><input type="radio" name="q1a_freq" value="Very Often">Very Often</label>
+        <label class="opt"><input type="radio" name="q1a_freq" value="Often">Often</label>
+        <label class="opt"><input type="radio" name="q1a_freq" value="Sometimes">Sometimes</label>
+        <label class="opt"><input type="radio" name="q1a_freq" value="Occasionally">Occasionally</label>
+        <label class="opt"><input type="radio" name="q1a_freq" value="Never">Never</label>
+      </div>
+      <label class="field-label">Approximately how many hours per week</label>
+      <input type="number" id="q1a_hours" name="q1a_hours" min="0" step="0.5">
+
+      <p class="qtext" style="margin-top:20px;">b) Now with your CI, how often do you choose to listen to music?</p>
+      <div class="choices" data-group="q1b_freq">
+        <label class="opt"><input type="radio" name="q1b_freq" value="Very Often">Very Often</label>
+        <label class="opt"><input type="radio" name="q1b_freq" value="Often">Often</label>
+        <label class="opt"><input type="radio" name="q1b_freq" value="Sometimes">Sometimes</label>
+        <label class="opt"><input type="radio" name="q1b_freq" value="Occasionally">Occasionally</label>
+        <label class="opt"><input type="radio" name="q1b_freq" value="Never">Never</label>
+      </div>
+      <label class="field-label">Approximately how many hours per week</label>
+      <input type="number" id="q1b_hours" name="q1b_hours" min="0" step="0.5">
+    </fieldset>
+  </section>
+
+  <!-- SECTION 2: Q2 situations -->
+  <section class="panel" data-panel="2">
+    <fieldset class="qblock">
+      <legend>Question 2</legend>
+      <p class="qtext">The following is a list of common situations where you may encounter music. Please rate, on a scale of 1–5, how much you enjoy listening to music in these situations — prior to the implant (with HAs), and now with the CI.</p>
+      <p class="qhint">1 = Do not enjoy at all · 5 = Very much enjoy · NA = Not enough experience with this situation</p>
+      <div id="q2_container"></div>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 3: Q3 -->
+  <section class="panel" data-panel="3">
+    <fieldset class="qblock">
+      <legend>Question 3</legend>
+      <p class="qtext">Please indicate which statement below best describes how you have found music to sound using your CI, when compared to using HAs.</p>
+      <div class="choices vertical" data-group="q3_compare">
+        <label class="opt"><input type="radio" name="q3_compare" value="Better than HAs, but still don't like the sound with either device">Music sounds better with the CI than it did with HAs, although I don't like the sound with either device.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="Better than HAs, now more pleasant">Music sounds better with the CI than it did with HAs, it now sounds more pleasant.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="No difference - disliked both">No difference — I didn't like the sound of music through the HAs, and still don't like the sound of music now with the CI.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="No difference - liked both">No difference — I liked the sound of music through the HAs, and like the sound of music now with the CI.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="Worse than HAs, dislike both">Music sounds worse with the CI than it did with HAs, although I don't like the sound with either device.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="Worse than HAs, liked HAs">Music sounds worse with the CI than it did with HAs, I didn't mind the sound of music through HAs, but don't like the sound through the CI.</label>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 4: Q4 -->
+  <section class="panel" data-panel="4">
+    <fieldset class="qblock">
+      <legend>Question 4</legend>
+      <p class="qtext">a) At present, with your CI — by listening only (ie. with no visual cues or prior knowledge), do you think you would be able to distinguish between:</p>
+
+      <div id="q4_container"></div>
+
+      <label class="field-label">Comments</label>
+      <textarea id="q4_comments" name="q4_comments"></textarea>
+
+      <p class="qtext" style="margin-top:20px;">b) Would you prefer to listen to a male or female singer?</p>
+      <div class="choices" data-group="q4b_pref">
+        <label class="opt"><input type="radio" name="q4b_pref" value="Male">Male</label>
+        <label class="opt"><input type="radio" name="q4b_pref" value="Female">Female</label>
+        <label class="opt"><input type="radio" name="q4b_pref" value="No preference">No preference</label>
+      </div>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 5: Q5 instruments - recognition -->
+  <section class="panel" data-panel="5">
+    <fieldset class="qblock">
+      <legend>Question 5</legend>
+      <p class="qtext">The following is a list of common musical instruments. Please rate, on a scale of 1–5, how easy it would be to recognize these instruments by sound only (ie. no visual cues) — prior to your implant (with HAs) compared to now, with your CI.</p>
+      <p class="qhint">1 = Impossible to recognize by sound only · 5 = Very easy to recognize by sound only · NA = Don't know this instrument / not enough exposure</p>
+      <div id="q5_container"></div>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 6: Q6 instruments - pleasantness -->
+  <section class="panel" data-panel="6">
+    <fieldset class="qblock">
+      <legend>Question 6</legend>
+      <p class="qtext">The following is the same list of musical instruments. Please rate, on a scale of 1–5, how pleasant these musical instruments sound — prior to your CI (with HAs) compared to now with your CI.</p>
+      <p class="qhint">1 = Do not enjoy at all · 5 = Very much enjoy · NA = Don't know this instrument / not enough exposure</p>
+      <div id="q6_container"></div>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 7: Q7 styles - recognition -->
+  <section class="panel" data-panel="7">
+    <fieldset class="qblock">
+      <legend>Question 7</legend>
+      <p class="qtext">The following is a list of common music styles. Please rate, on a scale of 1–5, how easy it would be to recognize these styles by sound only (ie. no visual cues) — prior to your CI (when using HAs), as well as now with your CI.</p>
+      <p class="qhint">1 = Impossible to recognize by sound only · 5 = Very easy to recognize by sound only · NA = Don't know this style / not enough exposure</p>
+      <div id="q7_container"></div>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 8: Q8 styles - pleasantness -->
+  <section class="panel" data-panel="8">
+    <fieldset class="qblock">
+      <legend>Question 8</legend>
+      <p class="qtext">The following is the same list of music styles. Please rate, on a scale of 1–5, how pleasant these styles sound — prior to your CI (using HAs), as well as now with your CI.</p>
+      <p class="qhint">1 = Do not enjoy at all · 5 = Very much enjoy · NA = Not enough experience with this style</p>
+      <div id="q8_container"></div>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 9: Q9 & Q10 -->
+  <section class="panel" data-panel="9">
+    <fieldset class="qblock">
+      <legend>Question 9</legend>
+      <p class="qtext">Overall, which device do you think is better for listening to music?</p>
+      <div class="choices" data-group="q9_better">
+        <label class="opt"><input type="radio" name="q9_better" value="Hearing Aids">Hearing Aids</label>
+        <label class="opt"><input type="radio" name="q9_better" value="Cochlear Implant">Cochlear Implant</label>
+        <label class="opt"><input type="radio" name="q9_better" value="No difference">No difference</label>
+      </div>
+    </fieldset>
+
+    <fieldset class="qblock">
+      <legend>Question 10</legend>
+      <p class="qtext">Could you describe / make some comments comparing the sound of music with HAs as opposed to with the CI?</p>
+      <textarea id="q10_comments" name="q10_comments" style="min-height:160px;"></textarea>
+    </fieldset>
+  </section>
+
+  <!-- SECTION 10: Review & Submit -->
+  <section class="panel" data-panel="10">
+    <div class="summary-card">
+      <h2>Review &amp; save</h2>
+      <p>You've reached the end of the questionnaire. Your answers are saved automatically on this device as you go. Use the buttons below to export your responses as a file.</p>
+      <div class="export-row">
+        <button type="button" class="primary" id="exportJsonBtn">Download JSON</button>
+        <button type="button" id="exportCsvBtn">Download CSV</button>
+        <button type="button" id="printBtn">Print / Save as PDF</button>
+      </div>
+      <details class="gdrive-note">
+        <summary>Saving this to Google Drive</summary>
+        <p>This app runs in your browser and can't sign in to Google on its own. After exporting, open <strong>drive.google.com</strong>, click <strong>New → File upload</strong>, and select the downloaded file. On a phone, use the Google Drive app's <strong>+ → Upload</strong> option — exported files go to your device's Downloads folder first.</p>
+      </details>
+      <div class="resp-id">Response ID: <span id="responseId"></span></div>
+      <button type="button" class="clear-link" id="clearBtn">Clear this form and start over</button>
+    </div>
+  </section>
+
+  </form>
+
+  <div class="navbar">
+    <div class="inner">
+      <button type="button" class="nav-btn secondary" id="prevBtn">Back</button>
+      <span class="status-pill" id="saveStatus"></span>
+      <button type="button" class="nav-btn" id="nextBtn">Next</button>
+    </div>
+  </div>
+
+  <div class="save-toast" id="saveToast">Saved</div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Data definitions ---------- */
+
+  var INSTRUMENTS = [
+    "Bass Drum or Timpani","Cello","Clarinet","Drum Kit","Female Singer","Flute","Guitar",
+    "Male Singer","Organ","Piano","Tambourine","Trombone","Trumpet","Violin","Xylophone",
+    "Dholak / Dhol","Tabla","Sitar","Harmonium","Sarangi","Veena","Bansuri (Indian Flute)",
+    "Shehnai","Santoor","Mridangam","Ghatam","Tanpura","Manjira / Cymbals (Indian)"
+  ];
+
+  var STYLES = [
+    "Recent Pop or Rock (eg. \u201Ctop 40\u201D, 80\u2019s, 90\u2019s)",
+    "Hard Rock (eg. \u201Cheavy metal\u201D)",
+    "Rap",
+    "60\u2019s \u2013 70\u2019s music",
+    "\u2018Old time\u2019 songs (eg. 20\u2019s-50\u2019s, war songs etc.)",
+    "Blues",
+    "Jazz (eg. swing band, ragtime etc.)",
+    "Country and Western",
+    "Musicals or Movie music",
+    "Classical",
+    "Easy Listening (eg. \u201Crelaxation\u201D, instrumental)",
+    "Religious (eg. hymns, gospel music etc.)",
+    "Indian Music (eg. Bollywood, classical, bhangra etc.)"
+  ];
+  var STYLE_SPECIFY = ["World Music", "Other"];
+
+  var Q2_ITEMS = [
+    {key:"radio_car", label:"Radio \u2013 Car"},
+    {key:"radio_home", label:"Radio \u2013 At home or work"},
+    {key:"radio_dai", label:"Radio \u2013 Via Direct Audio Input (if applicable)"},
+    {key:"radio_stations", type:"text3", label:"Preferred radio stations (up to 3)"},
+    {key:"tape_car", label:"Tape / Record / CD \u2013 Car"},
+    {key:"tape_home", label:"Tape / Record / CD \u2013 At home or work"},
+    {key:"tape_dai", label:"Tape / Record / CD \u2013 Via Direct Audio Input (if applicable)"},
+    {key:"tape_fav", type:"text3", label:"Favourite CD, Tape or Record (up to 3)"},
+    {key:"worship_choir", label:"Place of Worship \u2013 Choir"},
+    {key:"worship_organ", label:"Place of Worship \u2013 Organ or other Instruments"},
+    {key:"concert_classical", label:"Live Concert \u2013 Classical"},
+    {key:"concert_jazz", label:"Live Concert \u2013 Jazz"},
+    {key:"concert_pop", label:"Live Concert \u2013 Popular or Rock"},
+    {key:"concert_other", type:"specify", label:"Live Concert \u2013 Other"},
+    {key:"live_instrumental", label:"Live Music \u2013 Instrumental"},
+    {key:"live_singing", label:"Live Music \u2013 Singing"},
+    {key:"bg_tv", label:"Background Music \u2013 TV"},
+    {key:"bg_movie", label:"Background Music \u2013 Movie"},
+    {key:"bg_social", label:"Background Music \u2013 Social Event"},
+    {key:"bg_pa", label:"Background Music \u2013 PA system (eg. restaurant, shops etc.)"}
+  ];
+
+  var Q4_ITEMS = [
+    {key:"q4_i", label:"Male and female speaker"},
+    {key:"q4_ii", label:"Male and female singer"},
+    {key:"q4_iii", label:"Different music instruments"},
+    {key:"q4_iv", label:"Different music ensembles (eg. band from orchestra)"},
+    {key:"q4_v", label:"Different speakers of the same gender"},
+    {key:"q4_vi", label:"A singer from a speaker (of either gender)"},
+    {key:"q4_vii", label:"Band/ensemble with a singer, from a band/ensemble without a singer"}
+  ];
+
+  var SECTIONS = ["Intro & background","Q1 \u2013 Listening frequency","Q2 \u2013 Situations","Q3 \u2013 Sound comparison",
+    "Q4 \u2013 Discrimination","Q5 \u2013 Instruments (recognition)","Q6 \u2013 Instruments (pleasantness)",
+    "Q7 \u2013 Styles (recognition)","Q8 \u2013 Styles (pleasantness)","Q9 & Q10 \u2013 Overall","Review & Save"];
+
+  var STORAGE_KEY = "mleq_responses_v1";
+  var state = {};
+  var currentPanel = 0;
+  var totalPanels = SECTIONS.length;
+  var responseId = null;
+
+  /* ---------- Storage helpers (in-memory + window.storage if present) ---------- */
+
+  function loadState(){
+    try{
+      var raw = sessionStorage.getItem(STORAGE_KEY);
+      if(raw){ return JSON.parse(raw); }
+    }catch(e){}
+    return null;
+  }
+
+  function persist(){
+    try{
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify({state:state, responseId:responseId, panel:currentPanel}));
+    }catch(e){}
+    if(window.storage && typeof window.storage.set === "function"){
+      window.storage.set("mleq:" + responseId, JSON.stringify(state)).catch(function(){});
+    }
+    showSavedToast();
+  }
+
+  var toastTimer = null;
+  function showSavedToast(){
+    var t = document.getElementById("saveToast");
+    var s = document.getElementById("saveStatus");
+    t.classList.add("show");
+    s.textContent = "Saved " + new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 1400);
+  }
+
+  function makeResponseId(){
+    return "MLEQ-" + Date.now().toString(36).toUpperCase();
+  }
+
+  /* ---------- Builders for repeated table sections ---------- */
+
+  function scaleRowHTML(name, itemLabel, columnsCount){
+    // columnsCount: 1 or 2 (Previously / Present)
+    var cols = ["prev","present"].slice(0, columnsCount);
+    var colLabel = {prev:"Previously (HAs)", present:"Present (CI)"};
+    var html = '<div class="scale-row">';
+    html += '<div class="item-name">' + itemLabel + '</div>';
+    cols.forEach(function(c){
+      html += '<div class="scale-opts ' + (c==="present"?"col-divider":"") + '" data-name="'+name+'_'+c+'">';
+      [1,2,3,4,5].forEach(function(v){
+        html += '<button type="button" class="scale-btn" data-val="'+v+'">'+v+'</button>';
+      });
+      html += '<button type="button" class="scale-btn na" data-val="NA">NA</button>';
+      html += '</div>';
+    });
+    html += '</div>';
+    return html;
+  }
+
+  function buildScaleTable(containerId, items, namePrefix){
+    var el = document.getElementById(containerId);
+    var html = '<div class="scale-table">';
+    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (HAs)</div><div class="lbl-col">Present (CI)</div></div>';
+    items.forEach(function(label, idx){
+      var name = namePrefix + "_" + idx;
+      html += scaleRowHTML(name, label, 2);
+    });
+    html += '</div>';
+    el.innerHTML = html;
+    wireScaleButtons(el);
+  }
+
+  function wireScaleButtons(scopeEl){
+    scopeEl.querySelectorAll(".scale-opts").forEach(function(group){
+      var name = group.getAttribute("data-name");
+      group.querySelectorAll(".scale-btn").forEach(function(btn){
+        btn.addEventListener("click", function(){
+          group.querySelectorAll(".scale-btn").forEach(function(b){ b.classList.remove("selected"); });
+          btn.classList.add("selected");
+          state[name] = btn.getAttribute("data-val");
+          persist();
+        });
+      });
+    });
+  }
+
+  function restoreScaleButtons(scopeEl){
+    scopeEl.querySelectorAll(".scale-opts").forEach(function(group){
+      var name = group.getAttribute("data-name");
+      var val = state[name];
+      if(val !== undefined){
+        group.querySelectorAll(".scale-btn").forEach(function(b){
+          if(b.getAttribute("data-val") === val){ b.classList.add("selected"); }
+        });
+      }
+    });
+  }
+
+  /* Q2: mixed scale rows + free text rows */
+  function buildQ2(){
+    var el = document.getElementById("q2_container");
+    var html = '<div class="scale-table">';
+    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (HAs)</div><div class="lbl-col">Present (CI)</div></div>';
+    Q2_ITEMS.forEach(function(item){
+      if(item.type === "text3"){
+        html += '<div class="scale-row" style="grid-template-columns:1fr;">';
+        html += '<label class="field-label" style="margin-top:6px;">'+item.label+'</label>';
+        html += '<div class="row2">';
+        for(var i=1;i<=3;i++){
+          html += '<input type="text" data-text-key="'+item.key+'_'+i+'" placeholder="'+i+')">';
+        }
+        html += '</div></div>';
+      } else if(item.type === "specify"){
+        html += '<div class="scale-row" style="grid-template-columns:1fr;">';
+        html += '<div class="specify-line"><label class="field-label" style="margin:0;">'+item.label+'</label></div>';
+        html += '<input type="text" data-text-key="'+item.key+'_specify" placeholder="Specify\u2026" style="margin-bottom:8px;">';
+        html += scaleRowHTML(item.key, "Rating", 2);
+        html += '</div>';
+      } else {
+        html += scaleRowHTML(item.key, item.label, 2);
+      }
+    });
+    html += '</div>';
+    el.innerHTML = html;
+    wireScaleButtons(el);
+    el.querySelectorAll("input[data-text-key]").forEach(function(inp){
+      inp.addEventListener("input", function(){
+        state[inp.getAttribute("data-text-key")] = inp.value;
+        persist();
+      });
+    });
+  }
+
+  function restoreQ2(){
+    var el = document.getElementById("q2_container");
+    restoreScaleButtons(el);
+    el.querySelectorAll("input[data-text-key]").forEach(function(inp){
+      var k = inp.getAttribute("data-text-key");
+      if(state[k] !== undefined){ inp.value = state[k]; }
+    });
+  }
+
+  /* Q4: yes/no discrimination items */
+  function buildQ4(){
+    var el = document.getElementById("q4_container");
+    var html = "";
+    Q4_ITEMS.forEach(function(item, idx){
+      html += '<div style="margin-bottom:14px;">';
+      html += '<div style="font-size:.9rem;margin-bottom:6px;">'+ (idx+1) +') '+item.label+'</div>';
+      html += '<div class="choices yn" data-group="'+item.key+'">';
+      html += '<label class="opt"><input type="radio" name="'+item.key+'" value="Yes">Yes</label>';
+      html += '<label class="opt"><input type="radio" name="'+item.key+'" value="No">No</label>';
+      html += '</div></div>';
+    });
+    el.innerHTML = html;
+    wireRadioGroups(el);
+  }
+
+  /* Q5 / Q6: instrument tables */
+  function buildQ5(){ buildScaleTable("q5_container", INSTRUMENTS, "q5"); }
+  function buildQ6(){ buildScaleTable("q6_container", INSTRUMENTS, "q6"); }
+
+  /* Q7 / Q8: style tables incl. specify rows */
+  function buildStyleTable(containerId, namePrefix){
+    var el = document.getElementById(containerId);
+    var html = '<div class="scale-table">';
+    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (HAs)</div><div class="lbl-col">Present (CI)</div></div>';
+    STYLES.forEach(function(label, idx){
+      html += scaleRowHTML(namePrefix + "_" + idx, label, 2);
+    });
+    STYLE_SPECIFY.forEach(function(label, idx){
+      var key = namePrefix + "_specify_" + idx;
+      html += '<div class="scale-row" style="grid-template-columns:1fr;">';
+      html += '<input type="text" data-text-key="'+key+'_text" placeholder="'+label+' (specify)\u2026" style="margin-bottom:8px;">';
+      html += scaleRowHTML(key, label, 2);
+      html += '</div>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+    wireScaleButtons(el);
+    el.querySelectorAll("input[data-text-key]").forEach(function(inp){
+      inp.addEventListener("input", function(){
+        state[inp.getAttribute("data-text-key")] = inp.value;
+        persist();
+      });
+    });
+  }
+  function restoreStyleTable(containerId){
+    var el = document.getElementById(containerId);
+    restoreScaleButtons(el);
+    el.querySelectorAll("input[data-text-key]").forEach(function(inp){
+      var k = inp.getAttribute("data-text-key");
+      if(state[k] !== undefined){ inp.value = state[k]; }
+    });
+  }
+  function buildQ7(){ buildStyleTable("q7_container", "q7"); }
+  function buildQ8(){ buildStyleTable("q8_container", "q8"); }
+
+  /* ---------- Generic radio / text wiring for static fields ---------- */
+
+  function wireRadioGroups(scope){
+    scope.querySelectorAll('.choices[data-group]').forEach(function(group){
+      var name = group.getAttribute("data-group");
+      group.querySelectorAll('input[type=radio]').forEach(function(radio){
+        radio.addEventListener("change", function(){
+          group.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("selected"); });
+          radio.closest(".opt").classList.add("selected");
+          state[name] = radio.value;
+          persist();
+          if(name === "f_otherha"){
+            document.getElementById("f_otherha_detail").style.display = radio.value === "Yes" ? "block" : "none";
+          }
+        });
+      });
+    });
+  }
+
+  function wireTextInputs(scope){
+    scope.querySelectorAll("input[type=text],input[type=date],input[type=number],textarea").forEach(function(inp){
+      if(!inp.id) return;
+      inp.addEventListener("input", function(){
+        state[inp.id] = inp.value;
+        persist();
+      });
+    });
+  }
+
+  function restoreStaticFields(scope){
+    scope.querySelectorAll("input[type=text],input[type=date],input[type=number],textarea").forEach(function(inp){
+      if(inp.id && state[inp.id] !== undefined){ inp.value = state[inp.id]; }
+    });
+    scope.querySelectorAll('.choices[data-group]').forEach(function(group){
+      var name = group.getAttribute("data-group");
+      if(state[name] !== undefined){
+        group.querySelectorAll('input[type=radio]').forEach(function(radio){
+          if(radio.value === state[name]){
+            radio.checked = true;
+            radio.closest(".opt").classList.add("selected");
+          }
+        });
+        if(name === "f_otherha" && state[name] === "Yes"){
+          document.getElementById("f_otherha_detail").style.display = "block";
+        }
+      }
+    });
+  }
+
+  /* ---------- Navigation ---------- */
+
+  function showPanel(idx){
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("active"); });
+    var target = document.querySelector('.panel[data-panel="'+idx+'"]');
+    if(target) target.classList.add("active");
+    currentPanel = idx;
+    document.getElementById("prevBtn").disabled = (idx === 0);
+    document.getElementById("nextBtn").textContent = (idx === totalPanels-1) ? "Done" : "Next";
+    document.getElementById("nextBtn").style.display = (idx === totalPanels-1) ? "none" : "inline-block";
+    document.getElementById("progressText").textContent = "Section " + (idx+1) + " of " + totalPanels + " \u2014 " + SECTIONS[idx];
+    var pct = Math.round((idx)/(totalPanels-1)*100);
+    document.getElementById("progressFill").style.width = pct + "%";
+    document.getElementById("progressPct").textContent = pct + "%";
+    window.scrollTo({top:0, behavior:"smooth"});
+    persist();
+  }
+
+  document.getElementById("nextBtn").addEventListener("click", function(){
+    if(currentPanel < totalPanels - 1){ showPanel(currentPanel + 1); }
+  });
+  document.getElementById("prevBtn").addEventListener("click", function(){
+    if(currentPanel > 0){ showPanel(currentPanel - 1); }
+  });
+
+  /* ---------- Export ---------- */
+
+  function buildExportObject(){
+    return {
+      responseId: responseId,
+      exportedAt: new Date().toISOString(),
+      answers: state
+    };
+  }
+
+  function download(filename, content, mime){
+    var blob = new Blob([content], {type:mime});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+  }
+
+  document.getElementById("exportJsonBtn").addEventListener("click", function(){
+    var obj = buildExportObject();
+    download(responseId + ".json", JSON.stringify(obj, null, 2), "application/json");
+  });
+
+  document.getElementById("exportCsvBtn").addEventListener("click", function(){
+    var obj = buildExportObject();
+    var rows = [["field","value"]];
+    Object.keys(obj.answers).forEach(function(k){
+      var v = obj.answers[k];
+      rows.push([k, String(v === undefined || v === null ? "" : v).replace(/"/g,'""')]);
+    });
+    var csv = rows.map(function(r){ return r.map(function(c){ return '"'+c+'"'; }).join(","); }).join("\n");
+    download(responseId + ".csv", csv, "text/csv");
+  });
+
+  document.getElementById("printBtn").addEventListener("click", function(){
+    window.print();
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", function(){
+    if(confirm("Clear all answers on this device and start a new response?")){
+      state = {};
+      responseId = makeResponseId();
+      try{ sessionStorage.removeItem(STORAGE_KEY); }catch(e){}
+      document.querySelectorAll("input[type=text],input[type=date],input[type=number],textarea").forEach(function(i){ i.value=""; });
+      document.querySelectorAll(".opt.selected").forEach(function(o){ o.classList.remove("selected"); });
+      document.querySelectorAll("input[type=radio]").forEach(function(r){ r.checked=false; });
+      document.querySelectorAll(".scale-btn.selected").forEach(function(b){ b.classList.remove("selected"); });
+      document.getElementById("f_otherha_detail").style.display = "none";
+      document.getElementById("responseId").textContent = responseId;
+      showPanel(0);
+    }
+  });
+
+  /* ---------- Init ---------- */
+
+  function init(){
+    buildQ2();
+    buildQ4();
+    buildQ5();
+    buildQ6();
+    buildQ7();
+    buildQ8();
+
+    wireRadioGroups(document);
+    wireTextInputs(document);
+
+    var saved = loadState();
+    if(saved && saved.state){
+      state = saved.state;
+      responseId = saved.responseId || makeResponseId();
+      restoreStaticFields(document);
+      restoreQ2();
+      restoreScaleButtons(document.getElementById("q4_container")); // no-op, q4 uses radios
+      restoreRadiosForScope(document.getElementById("q4_container"));
+      restoreScaleButtons(document.getElementById("q5_container"));
+      restoreScaleButtons(document.getElementById("q6_container"));
+      restoreStyleTable("q7_container");
+      restoreStyleTable("q8_container");
+      showPanel(saved.panel || 0);
+    } else {
+      responseId = makeResponseId();
+      if(!document.getElementById("f_date").value){
+        document.getElementById("f_date").value = new Date().toISOString().slice(0,10);
+      }
+      showPanel(0);
+    }
+    document.getElementById("responseId").textContent = responseId;
+  }
+
+  function restoreRadiosForScope(scope){
+    scope.querySelectorAll('input[type=radio]').forEach(function(radio){
+      if(state[radio.name] === radio.value){
+        radio.checked = true;
+        radio.closest(".opt").classList.add("selected");
+      }
+    });
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>
