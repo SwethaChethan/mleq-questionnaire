@@ -249,6 +249,18 @@
   details.gdrive-note summary{cursor:pointer;font-weight:600;color:var(--teal-dark);}
   details.gdrive-note p{margin:8px 0 0;}
 
+  details.cite-note{
+    margin-top:14px;text-align:left;font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+    font-size:.78rem;color:#594f3f;background:var(--paper-2);border-radius:8px;padding:10px 12px;
+  }
+  details.cite-note summary{cursor:pointer;font-weight:600;color:var(--teal-dark);}
+  details.cite-note p{margin:8px 0 0;}
+
+  footer.cite-footer{
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;font-size:.68rem;color:#a39a86;
+    text-align:center;margin:24px 0 8px;line-height:1.6;
+  }
+
   .resp-id{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;font-size:.68rem;color:#a39a86;text-align:center;margin-top:6px;}
 
   .clear-link{
@@ -312,6 +324,9 @@
   <section class="panel" data-panel="1">
     <div class="intro">
       <p>This questionnaire compares your experience of listening to music with hearing aids (before your implant) to now, with your cochlear implant. Please answer every question as best you can — there are no right or wrong answers. Thank you for your time.</p>
+      <div class="attribution">
+        <strong>About this questionnaire.</strong> This is a digital, adapted version of the MLEQ (Music Listening and Enjoyment Questionnaire), originally developed by Valerie Looi, and used here with her permission.
+      </div>
     </div>
 
     <fieldset class="qblock">
@@ -573,9 +588,16 @@
         </div>
         <p>If you download a file instead of submitting, you can share it with your clinic by uploading it at <strong>drive.google.com</strong> (New → File upload), or on a phone via the Google Drive app's <strong>+ → Upload</strong> option.</p>
       </details>
+      <details class="cite-note">
+        <summary>Citation &amp; copyright</summary>
+        <p>This is an adapted digital version of the MLEQ (Music Listening and Enjoyment Questionnaire), © Valerie Looi, used and modified with permission.</p>
+      </details>
       <div class="resp-id">Response ID: <span id="responseId"></span></div>
       <button type="button" class="clear-link" id="clearBtn">Clear this form and start over</button>
     </div>
+    <footer class="cite-footer">
+      Adapted from the MLEQ, © Valerie Looi — used with permission.
+    </footer>
   </section>
 
   </form>
@@ -1036,7 +1058,7 @@ function getInstrumentVisual(label){
     return {
       responseId: responseId,
       exportedAt: new Date().toISOString(),
-      source: "MLEQ (Music Listening and Enjoyment Questionnaire, post-CI version)",
+      source: "MLEQ (Music Listening and Enjoyment Questionnaire, post-CI version, adapted, used with permission of Valerie Looi)",
       answers: state
     };
   }
