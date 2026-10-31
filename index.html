@@ -96,13 +96,21 @@
     border-radius:var(--radius);
     background:var(--paper);
     margin:18px 0;
-    padding:18px 18px 20px;
+    padding:0;
   }
   fieldset.qblock legend{
     font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
-    font-weight:700;font-size:.78rem;letter-spacing:.06em;
-    color:var(--teal-dark);text-transform:uppercase;
-    padding:0 8px;margin-left:-8px;
+    font-weight:700;font-size:.76rem;letter-spacing:.06em;
+    color:#fff;text-transform:uppercase;
+    background:var(--teal-dark);
+    border-radius:var(--radius) var(--radius) 0 0;
+    width:100%;padding:10px 18px;
+    box-sizing:border-box;
+    margin:0;float:none;
+    display:block;
+  }
+  fieldset.qblock .qblock-body{
+    padding:18px 18px 20px;
   }
   .qtext{font-size:1rem;margin:2px 0 14px;font-weight:600;color:var(--ink);}
   .qhint{
@@ -297,7 +305,8 @@
     </div>
 
     <fieldset class="qblock">
-      <legend>Consent to participate</legend>
+      <legend>Consent to participate</legend><div class="qblock-body">
+<div class="qblock-body">
       <div class="consent-row">
         <label class="consent-check">
           <input type="checkbox" id="consent_voluntary">
@@ -317,7 +326,8 @@
         </label>
       </div>
       <p class="consent-warning" id="consentWarning">Please check all three boxes above to continue.</p>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 1: Intro + Demographics -->
@@ -330,7 +340,8 @@
     </div>
 
     <fieldset class="qblock">
-      <legend>About you</legend>
+      <legend>About you</legend><div class="qblock-body">
+<div class="qblock-body">
       <label class="field-label">Name</label>
       <input type="text" id="f_name" name="f_name">
 
@@ -390,7 +401,7 @@
         <input type="text" id="f_otherha_type" name="f_otherha_type">
       </div>
 
-      <label class="field-label">Have you used the following features with your CI?</label>
+      <label class="field-label">Have you used the following features with your Cochlear Implant?</label>
       <div class="row2">
         <div>
           <span class="qhint" style="margin:0 0 6px;display:block;">Direct audio input</span>
@@ -401,10 +412,12 @@
           <div class="choices" data-group="f_telecoil"><label class="opt"><input type="radio" name="f_telecoil" value="Yes">Yes</label><label class="opt"><input type="radio" name="f_telecoil" value="No">No</label></div>
         </div>
       </div>
-    </fieldset>
+</div>
+    </div></fieldset>
 
     <fieldset class="qblock">
-      <legend>Overall impressions</legend>
+      <legend>Overall impressions</legend><div class="qblock-body">
+<div class="qblock-body">
       <p class="qtext">In your opinion, how much difference has the implant made for your speech perception?</p>
       <div class="choices vertical" data-group="f_speechdiff">
         <label class="opt"><input type="radio" name="f_speechdiff" value="1">1 — Worse</label>
@@ -431,14 +444,16 @@
       </div>
       <label class="field-label">Please comment</label>
       <textarea id="f_expectations_comment" name="f_expectations_comment"></textarea>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 1: Q1 -->
   <section class="panel" data-panel="2">
     <fieldset class="qblock">
-      <legend>Question 1</legend>
-      <p class="qtext">a) Prior to your CI, how often did you choose to listen to music (eg. radio, tape, CD, concerts etc.)?</p>
+      <legend>Question 1</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">a) Prior to your Cochlear Implant, how often did you choose to listen to music (eg. radio, tape, CD, concerts etc.)?</p>
       <div class="choices" data-group="q1a_freq">
         <label class="opt"><input type="radio" name="q1a_freq" value="Very Often">Very Often</label>
         <label class="opt"><input type="radio" name="q1a_freq" value="Often">Often</label>
@@ -449,7 +464,7 @@
       <label class="field-label">Approximately how many hours per week</label>
       <input type="number" id="q1a_hours" name="q1a_hours" min="0" step="0.5">
 
-      <p class="qtext" style="margin-top:20px;">b) Now with your CI, how often do you choose to listen to music?</p>
+      <p class="qtext" style="margin-top:20px;">b) Now with your Cochlear Implant, how often do you choose to listen to music?</p>
       <div class="choices" data-group="q1b_freq">
         <label class="opt"><input type="radio" name="q1b_freq" value="Very Often">Very Often</label>
         <label class="opt"><input type="radio" name="q1b_freq" value="Often">Often</label>
@@ -459,40 +474,46 @@
       </div>
       <label class="field-label">Approximately how many hours per week</label>
       <input type="number" id="q1b_hours" name="q1b_hours" min="0" step="0.5">
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 2: Q2 situations -->
   <section class="panel" data-panel="3">
     <fieldset class="qblock">
-      <legend>Question 2</legend>
-      <p class="qtext">The following is a list of common situations where you may encounter music. Please rate, on a scale of 1–5, how much you enjoy listening to music in these situations — prior to the implant (with HAs), and now with the CI.</p>
+      <legend>Question 2</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">The following is a list of common situations where you may encounter music. Please rate, on a scale of 1–5, how much you enjoy listening to music in these situations — prior to the implant (with Hearing Aids), and now with the Cochlear Implant.</p>
       <p class="qhint">1 = Do not enjoy at all · 5 = Very much enjoy · NA = Not enough experience with this situation</p>
       <div id="q2_container"></div>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 3: Q3 -->
   <section class="panel" data-panel="4">
     <fieldset class="qblock">
-      <legend>Question 3</legend>
-      <p class="qtext">Please indicate which statement below best describes how you have found music to sound using your CI, when compared to using HAs.</p>
+      <legend>Question 3</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">Please indicate which statement below best describes how you have found music to sound using your Cochlear Implant, when compared to using Hearing Aids.</p>
       <div class="choices vertical" data-group="q3_compare">
-        <label class="opt"><input type="radio" name="q3_compare" value="Better than HAs, but still don't like the sound with either device">Music sounds better with the CI than it did with HAs, although I don't like the sound with either device.</label>
-        <label class="opt"><input type="radio" name="q3_compare" value="Better than HAs, now more pleasant">Music sounds better with the CI than it did with HAs, it now sounds more pleasant.</label>
-        <label class="opt"><input type="radio" name="q3_compare" value="No difference - disliked both">No difference — I didn't like the sound of music through the HAs, and still don't like the sound of music now with the CI.</label>
-        <label class="opt"><input type="radio" name="q3_compare" value="No difference - liked both">No difference — I liked the sound of music through the HAs, and like the sound of music now with the CI.</label>
-        <label class="opt"><input type="radio" name="q3_compare" value="Worse than HAs, dislike both">Music sounds worse with the CI than it did with HAs, although I don't like the sound with either device.</label>
-        <label class="opt"><input type="radio" name="q3_compare" value="Worse than HAs, liked HAs">Music sounds worse with the CI than it did with HAs, I didn't mind the sound of music through HAs, but don't like the sound through the CI.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="Better than HAs, but still don't like the sound with either device">Music sounds better with the Cochlear Implant than it did with Hearing Aids, although I don't like the sound with either device.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="Better than HAs, now more pleasant">Music sounds better with the Cochlear Implant than it did with Hearing Aids, it now sounds more pleasant.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="No difference - disliked both">No difference — I didn't like the sound of music through the HAs, and still don't like the sound of music now with the Cochlear Implant.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="No difference - liked both">No difference — I liked the sound of music through the HAs, and like the sound of music now with the Cochlear Implant.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="Worse than HAs, dislike both">Music sounds worse with the Cochlear Implant than it did with Hearing Aids, although I don't like the sound with either device.</label>
+        <label class="opt"><input type="radio" name="q3_compare" value="Worse than HAs, liked HAs">Music sounds worse with the Cochlear Implant than it did with Hearing Aids, I didn't mind the sound of music through HAs, but don't like the sound through the Cochlear Implant.</label>
       </div>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 4: Q4 -->
   <section class="panel" data-panel="5">
     <fieldset class="qblock">
-      <legend>Question 4</legend>
-      <p class="qtext">a) At present, with your CI — by listening only (ie. with no visual cues or prior knowledge), do you think you would be able to distinguish between:</p>
+      <legend>Question 4</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">a) At present, with your Cochlear Implant — by listening only (ie. with no visual cues or prior knowledge), do you think you would be able to distinguish between:</p>
 
       <div id="q4_container"></div>
 
@@ -505,66 +526,79 @@
         <label class="opt"><input type="radio" name="q4b_pref" value="Female">Female</label>
         <label class="opt"><input type="radio" name="q4b_pref" value="No preference">No preference</label>
       </div>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 5: Q5 instruments - recognition -->
   <section class="panel" data-panel="6">
     <fieldset class="qblock">
-      <legend>Question 5</legend>
-      <p class="qtext">The following is a list of common musical instruments. Please rate, on a scale of 1–5, how easy it would be to recognize these instruments by sound only (ie. no visual cues) — prior to your implant (with HAs) compared to now, with your CI.</p>
+      <legend>Question 5</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">The following is a list of common musical instruments. Please rate, on a scale of 1–5, how easy it would be to recognize these instruments by sound only (ie. no visual cues) — prior to your implant (with Hearing Aids) compared to now, with your Cochlear Implant.</p>
       <p class="qhint">1 = Impossible to recognize by sound only · 5 = Very easy to recognize by sound only · NA = Don't know this instrument / not enough exposure</p>
       <div id="q5_container"></div>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 6: Q6 instruments - pleasantness -->
   <section class="panel" data-panel="7">
     <fieldset class="qblock">
-      <legend>Question 6</legend>
-      <p class="qtext">The following is the same list of musical instruments. Please rate, on a scale of 1–5, how pleasant these musical instruments sound — prior to your CI (with HAs) compared to now with your CI.</p>
+      <legend>Question 6</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">The following is the same list of musical instruments. Please rate, on a scale of 1–5, how pleasant these musical instruments sound — prior to your Cochlear Implant (with Hearing Aids) compared to now with your Cochlear Implant.</p>
       <p class="qhint">1 = Do not enjoy at all · 5 = Very much enjoy · NA = Don't know this instrument / not enough exposure</p>
       <div id="q6_container"></div>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 7: Q7 styles - recognition -->
   <section class="panel" data-panel="8">
     <fieldset class="qblock">
-      <legend>Question 7</legend>
-      <p class="qtext">The following is a list of common music styles. Please rate, on a scale of 1–5, how easy it would be to recognize these styles by sound only (ie. no visual cues) — prior to your CI (when using HAs), as well as now with your CI.</p>
+      <legend>Question 7</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">The following is a list of common music styles. Please rate, on a scale of 1–5, how easy it would be to recognize these styles by sound only (ie. no visual cues) — prior to your Cochlear Implant (when using Hearing Aids), as well as now with your Cochlear Implant.</p>
       <p class="qhint">1 = Impossible to recognize by sound only · 5 = Very easy to recognize by sound only · NA = Don't know this style / not enough exposure</p>
       <div id="q7_container"></div>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 8: Q8 styles - pleasantness -->
   <section class="panel" data-panel="9">
     <fieldset class="qblock">
-      <legend>Question 8</legend>
-      <p class="qtext">The following is the same list of music styles. Please rate, on a scale of 1–5, how pleasant these styles sound — prior to your CI (using HAs), as well as now with your CI.</p>
+      <legend>Question 8</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">The following is the same list of music styles. Please rate, on a scale of 1–5, how pleasant these styles sound — prior to your Cochlear Implant (using Hearing Aids), as well as now with your Cochlear Implant.</p>
       <p class="qhint">1 = Do not enjoy at all · 5 = Very much enjoy · NA = Not enough experience with this style</p>
       <div id="q8_container"></div>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 9: Q9 & Q10 -->
   <section class="panel" data-panel="10">
     <fieldset class="qblock">
-      <legend>Question 9</legend>
+      <legend>Question 9</legend><div class="qblock-body">
+<div class="qblock-body">
       <p class="qtext">Overall, which device do you think is better for listening to music?</p>
       <div class="choices" data-group="q9_better">
         <label class="opt"><input type="radio" name="q9_better" value="Hearing Aids">Hearing Aids</label>
         <label class="opt"><input type="radio" name="q9_better" value="Cochlear Implant">Cochlear Implant</label>
         <label class="opt"><input type="radio" name="q9_better" value="No difference">No difference</label>
       </div>
-    </fieldset>
+</div>
+    </div></fieldset>
 
     <fieldset class="qblock">
-      <legend>Question 10</legend>
-      <p class="qtext">Could you describe / make some comments comparing the sound of music with HAs as opposed to with the CI?</p>
+      <legend>Question 10</legend><div class="qblock-body">
+<div class="qblock-body">
+      <p class="qtext">Could you describe / make some comments comparing the sound of music with Hearing Aids as opposed to with the Cochlear Implant?</p>
       <textarea id="q10_comments" name="q10_comments" style="min-height:160px;"></textarea>
-    </fieldset>
+</div>
+    </div></fieldset>
   </section>
 
   <!-- SECTION 10: Review & Submit -->
@@ -661,7 +695,7 @@ function getInstrumentIconSvg(label){
 
 // Instrument reference photos (embedded as base64 data URIs).
 // Used in place of the line-art icon when a photo is available, to help
-// CI users who may not be familiar with an instrument's name recognize it visually.
+// Cochlear Implant users who may not be familiar with an instrument's name recognize it visually.
 var INSTRUMENT_PHOTOS = {
   piano: "data:image/jpeg;base64,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",
   strings: "data:image/jpeg;base64,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",
@@ -699,13 +733,21 @@ function getInstrumentVisual(label){
   /* ---------- Data definitions ---------- */
 
   var INSTRUMENTS = [
+    "Tabla","Mridangam","Veena","Sitar","Sarangi","Bansuri (Indian Flute)",
+    "Harmonium","Santoor","Shehnai","Ghatam","Tanpura","Manjira / Cymbals (Indian)",
+    "Dholak / Dhol",
     "Bass Drum or Timpani","Cello","Clarinet","Drum Kit","Female Singer","Flute","Guitar",
-    "Male Singer","Organ","Piano","Tambourine","Trombone","Trumpet","Violin","Xylophone",
-    "Dholak / Dhol","Tabla","Sitar","Harmonium","Sarangi","Veena","Bansuri (Indian Flute)",
-    "Shehnai","Santoor","Mridangam","Ghatam","Tanpura","Manjira / Cymbals (Indian)"
+    "Male Singer","Organ","Piano","Tambourine","Trombone","Trumpet","Violin","Xylophone"
   ];
 
   var STYLES = [
+    "Filmy / Bollywood",
+    "Carnatic",
+    "Hindustani Classical",
+    "Indian Folk",
+    "Bhangra",
+    "Qawwali / Sufi",
+    "Devotional / Bhajan",
     "Recent Pop or Rock (eg. \u201Ctop 40\u201D, 80\u2019s, 90\u2019s)",
     "Hard Rock (eg. \u201Cheavy metal\u201D)",
     "Rap",
@@ -717,8 +759,7 @@ function getInstrumentVisual(label){
     "Musicals or Movie music",
     "Classical",
     "Easy Listening (eg. \u201Crelaxation\u201D, instrumental)",
-    "Religious (eg. hymns, gospel music etc.)",
-    "Indian Music (eg. Bollywood, classical, bhangra etc.)"
+    "Religious (eg. hymns, gospel music etc.)"
   ];
   var STYLE_SPECIFY = ["World Music", "Other"];
 
@@ -804,7 +845,7 @@ function getInstrumentVisual(label){
   function scaleRowHTML(name, itemLabel, columnsCount, iconSvg){
     // columnsCount: 1 or 2 (Previously / Present)
     var cols = ["prev","present"].slice(0, columnsCount);
-    var colLabel = {prev:"Previously (HAs)", present:"Present (CI)"};
+    var colLabel = {prev:"Previously (Hearing Aids)", present:"Present (Cochlear Implant)"};
     var html = '<div class="scale-row">';
     html += '<div class="item-name"><div class="item-name-row">';
     if(iconSvg){ html += '<span class="item-icon">'+iconSvg+'</span>'; }
@@ -824,7 +865,7 @@ function getInstrumentVisual(label){
   function buildScaleTable(containerId, items, namePrefix, showIcons){
     var el = document.getElementById(containerId);
     var html = '<div class="scale-table">';
-    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (HAs)</div><div class="lbl-col">Present (CI)</div></div>';
+    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (Hearing Aids)</div><div class="lbl-col">Present (Cochlear Implant)</div></div>';
     items.forEach(function(label, idx){
       var name = namePrefix + "_" + idx;
       var icon = showIcons ? getInstrumentVisual(label) : null;
@@ -865,7 +906,7 @@ function getInstrumentVisual(label){
   function buildQ2(){
     var el = document.getElementById("q2_container");
     var html = '<div class="scale-table">';
-    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (HAs)</div><div class="lbl-col">Present (CI)</div></div>';
+    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (Hearing Aids)</div><div class="lbl-col">Present (Cochlear Implant)</div></div>';
     Q2_ITEMS.forEach(function(item){
       if(item.type === "text3"){
         html += '<div class="scale-row" style="grid-template-columns:1fr;">';
@@ -929,7 +970,7 @@ function getInstrumentVisual(label){
   function buildStyleTable(containerId, namePrefix){
     var el = document.getElementById(containerId);
     var html = '<div class="scale-table">';
-    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (HAs)</div><div class="lbl-col">Present (CI)</div></div>';
+    html += '<div class="scale-head"><div class="lbl-item"></div><div class="lbl-col">Previously (Hearing Aids)</div><div class="lbl-col">Present (Cochlear Implant)</div></div>';
     STYLES.forEach(function(label, idx){
       html += scaleRowHTML(namePrefix + "_" + idx, label, 2);
     });
